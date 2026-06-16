@@ -47,7 +47,7 @@ JSON 포맷 예시:
   "summary": "최종 전술 한줄 평 및 종합 분석..."
 }`;
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent`;
 
     const response = await fetch(endpoint, {
       method: "POST",
