@@ -797,7 +797,7 @@ export default function Home() {
                     <h4 className="text-base font-black text-white mb-2 flex items-center gap-1.5">
                       <span className="w-1.5 h-4 bg-indigo-400 rounded-full"></span> 키보드 조작 방법
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-3 mt-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-3 mt-3">
                       <div className="bg-slate-950/60 p-4 rounded-xl border border-white/5">
                         <div className="font-bold text-white mb-2.5 text-xs tracking-wider text-indigo-400">⬅️ 이동 조작</div>
                         <div className="space-y-1.5 text-slate-400 text-xs md:text-sm">
@@ -809,6 +809,13 @@ export default function Home() {
                         <div className="font-bold text-white mb-2.5 text-xs tracking-wider text-indigo-400">⬆️ 점프 조작</div>
                         <div className="space-y-1.5 text-slate-400 text-xs md:text-sm">
                           <p><kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono border border-white/10 mr-1.5">W</kbd> 또는 <kbd className="bg-slate-800 px-2 py-0.5 rounded text-white font-mono border border-white/10 mr-1.5">Space</kbd> 또는 <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono border border-white/10 mr-1.5">↑</kbd> : 위로 점프</p>
+                        </div>
+                      </div>
+                      <div className="bg-slate-950/60 p-4 rounded-xl border border-white/5">
+                        <div className="font-bold text-white mb-2.5 text-xs tracking-wider text-indigo-400">⏸️ 일시정지 조작</div>
+                        <div className="space-y-1.5 text-slate-400 text-xs md:text-sm">
+                          <p><kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono border border-white/10 mr-1.5">ESC</kbd> : 게임 일시정지 / 재개</p>
+                          <p>또는 화면 상단의 <span className="text-amber-400 font-bold">일시정지 버튼</span> 클릭</p>
                         </div>
                       </div>
                     </div>
