@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { User, Footprints, Zap, ChevronsUp, Swords, ArrowLeft, Play, Flame, Trophy } from "lucide-react";
+import { User, Footprints, Zap, ChevronsUp, Swords, ArrowLeft, Play, Pause, Flame, Trophy } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 interface Player {
@@ -79,6 +79,19 @@ export default function GamePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const keys = useRef<{ [key: string]: boolean }>({});
 
+  const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
+
+  const togglePause = () => {
+    if (gameState !== "PLAYING") return;
+    const nextPaused = !isPausedRef.current;
+    isPausedRef.current = nextPaused;
+    setIsPaused(nextPaused);
+    if (nextPaused) {
+      keys.current = {};
+    }
+  };
+
   useEffect(() => {
     async function fetchPlayers() {
       try {
@@ -126,6 +139,8 @@ export default function GamePage() {
     setAiScore(0);
     setWinner(null);
     setPlayerStreakInfo(null);
+    setIsPaused(false);
+    isPausedRef.current = false;
     setGameState("PLAYING");
   };
 
@@ -289,6 +304,19 @@ export default function GamePage() {
     let aiStunTimer = 0; // AI 충돌 경직 타이머
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.code === "Escape") {
+        e.preventDefault();
+        const nextPaused = !isPausedRef.current;
+        isPausedRef.current = nextPaused;
+        setIsPaused(nextPaused);
+        if (nextPaused) {
+          keys.current = {};
+        }
+        return;
+      }
+
+      if (isPausedRef.current) return;
+
       keys.current[e.code] = true;
       // 스페이스바(" ") 및 방향키 등의 스크롤 기본 동작 원천 차단
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space", " ", "KeyW", "KeyS", "KeyA", "KeyD"].includes(e.key) || 
@@ -330,6 +358,8 @@ export default function GamePage() {
     let animationFrameId: number;
 
     const updateGame = () => {
+      if (isPausedRef.current) return;
+
       if (goalTimer > 0) {
         goalTimer--;
         if (goalTimer === 0) {
@@ -854,6 +884,27 @@ export default function GamePage() {
         ctx.strokeText(goalText, 500, 205);
         ctx.fillText(goalText, 500, 205);
       }
+
+      // 8. 일시정지 오버레이
+      if (isPausedRef.current) {
+        ctx.fillStyle = "rgba(15, 23, 42, 0.75)";
+        ctx.fillRect(0, 0, 1000, 450);
+
+        ctx.save();
+        ctx.shadowColor = "#00f5d4";
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = "#00f5d4";
+        ctx.font = "bold italic 54px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("GAME PAUSED", 500, 200);
+        ctx.restore();
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.font = "bold 16px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Press ESC or Click Pause Button to Resume", 500, 260);
+      }
     };
 
     // 캐릭터 그리기 디테일 헬퍼 함수
@@ -1139,17 +1190,35 @@ export default function GamePage() {
               <div className="w-full max-w-5xl flex flex-col items-center">
                 {/* 대결 스코어보드 헤더 */}
                 <div className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 mb-8 flex items-center justify-between shadow-lg">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 w-1/3">
                     <span className="text-xs font-extrabold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">USER</span>
-                    <span className="text-base md:text-lg font-bold">{myPlayer?.name}</span>
+                    <span className="text-base md:text-lg font-bold truncate max-w-[120px] md:max-w-none">{myPlayer?.name}</span>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-3xl font-black text-blue-400">{myScore}</span>
-                    <span className="text-xl font-bold text-slate-600">:</span>
-                    <span className="text-3xl font-black text-red-400">{aiScore}</span>
+                  <div className="flex flex-col items-center gap-1.5 w-1/3">
+                    <div className="flex items-center gap-4">
+                      <span className="text-3xl font-black text-blue-400">{myScore}</span>
+                      <span className="text-xl font-bold text-slate-600">:</span>
+                      <span className="text-3xl font-black text-red-400">{aiScore}</span>
+                    </div>
+                    <button
+                      onClick={togglePause}
+                      className="flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg text-[10px] md:text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                    >
+                      {isPaused ? (
+                        <>
+                          <Play className="w-3 h-3 text-[#00f5d4] fill-[#00f5d4]" />
+                          <span>재개 (Resume)</span>
+                        </>
+                      ) : (
+                        <>
+                          <Pause className="w-3 h-3 text-amber-500 fill-amber-500" />
+                          <span>일시정지 (Pause)</span>
+                        </>
+                      )}
+                    </button>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-base md:text-lg font-bold text-right">{aiPlayer?.name}</span>
+                  <div className="flex items-center justify-end gap-3 w-1/3">
+                    <span className="text-base md:text-lg font-bold text-right truncate max-w-[120px] md:max-w-none">{aiPlayer?.name}</span>
                     <span className="text-xs font-extrabold px-2 py-0.5 bg-red-500/20 text-red-400 rounded">AI</span>
                   </div>
                 </div>
@@ -1166,15 +1235,21 @@ export default function GamePage() {
 
                 {/* 조작 설명 및 뒤로가기 제어 */}
                 <div className="mt-8 flex flex-col md:flex-row items-center justify-between w-full max-w-4xl gap-4">
-                  <div className="flex gap-4 text-xs font-mono text-slate-500 bg-slate-900/50 px-4 py-2.5 rounded-xl border border-slate-800/80">
+                  <div className="flex flex-wrap gap-2 md:gap-4 text-xs font-mono text-slate-500 bg-slate-900/50 px-4 py-2.5 rounded-xl border border-slate-800/80">
                     <span className="font-semibold text-slate-400">조작법:</span>
                     <span>방향키 ← / → (이동)</span>
                     <span>|</span>
                     <span>방향키 ↑ 또는 Space (점프)</span>
+                    <span>|</span>
+                    <span>ESC (일시정지)</span>
                   </div>
                   
                   <button
-                    onClick={() => setGameState("SELECT")}
+                    onClick={() => {
+                      setIsPaused(false);
+                      isPausedRef.current = false;
+                      setGameState("SELECT");
+                    }}
                     className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white rounded-xl text-sm font-semibold transition-all cursor-pointer"
                   >
                     포기하고 라인업 재구성으로 나가기
