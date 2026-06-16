@@ -1046,8 +1046,12 @@ export default function GamePage() {
         </div>
       </header>
 
-      {/* 메인 콘텐츠 영역 */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 max-w-7xl mx-auto w-full relative z-10">
+      {/* 메인 콘텐츠 영역 (게임 도중에는 공간을 더 확보하기 위해 패딩을 작게 축소) */}
+      <div 
+        className={`flex-1 flex flex-col items-center justify-center max-w-7xl mx-auto w-full relative z-10 transition-all ${
+          gameState === "PLAYING" ? "p-3 md:p-4" : "p-6 md:p-12"
+        }`}
+      >
         {loading ? (
           <div className="text-center py-20 text-slate-400">
             <div className="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
@@ -1187,9 +1191,9 @@ export default function GamePage() {
             )}
 
             {gameState === "PLAYING" && (
-              <div className="w-full max-w-5xl flex flex-col items-center">
-                {/* 대결 스코어보드 헤더 */}
-                <div className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 mb-8 flex items-center justify-between shadow-lg">
+              <div className="w-full max-w-4xl flex flex-col items-center">
+                {/* 대결 스코어보드 헤더 (세로 공간 최적화를 위해 패딩/마진 축소) */}
+                <div className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-3 md:p-4 mb-4 flex items-center justify-between shadow-lg">
                   <div className="flex items-center gap-3 w-1/3">
                     <span className="text-xs font-extrabold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">USER</span>
                     <span className="text-base md:text-lg font-bold truncate max-w-[120px] md:max-w-none">{myPlayer?.name}</span>
@@ -1233,8 +1237,8 @@ export default function GamePage() {
                   />
                 </div>
 
-                {/* 조작 설명 및 뒤로가기 제어 */}
-                <div className="mt-8 flex flex-col md:flex-row items-center justify-between w-full max-w-4xl gap-4">
+                {/* 조작 설명 및 뒤로가기 제어 (여백 최소화) */}
+                <div className="mt-4 flex flex-col md:flex-row items-center justify-between w-full max-w-4xl gap-4">
                   <div className="flex flex-wrap gap-2 md:gap-4 text-xs font-mono text-slate-500 bg-slate-900/50 px-4 py-2.5 rounded-xl border border-slate-800/80">
                     <span className="font-semibold text-slate-400">조작법:</span>
                     <span>방향키 ← / → (이동)</span>
@@ -1331,10 +1335,12 @@ export default function GamePage() {
         )}
       </div>
 
-      {/* 하단 푸터 */}
-      <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-500 relative z-10">
-        <p>© 2026 Big Head Football Match Engine. Powered by Gemini Next.js.</p>
-      </footer>
+      {/* 하단 푸터 (게임 플레이 도중에는 세로 공간 확보를 위해 숨김) */}
+      {gameState !== "PLAYING" && (
+        <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-500 relative z-10">
+          <p>© 2026 Big Head Football Match Engine. Powered by Gemini Next.js.</p>
+        </footer>
+      )}
     </main>
   );
 }
