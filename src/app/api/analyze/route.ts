@@ -47,36 +47,53 @@ JSON 포맷 예시:
   "summary": "최종 전술 한줄 평 및 종합 분석..."
 }`;
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent`;
+    const models = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
+    let response: Response | null = null;
+    let success = false;
+    let lastErrorMsg = "";
 
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
+    for (const model of models) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+      try {
+        response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey,
+          },
+          body: JSON.stringify({
+            contents: [
               {
-                text: systemPrompt,
+                parts: [
+                  {
+                    text: systemPrompt,
+                  },
+                ],
               },
             ],
-          },
-        ],
-        generationConfig: {
-          responseMimeType: "application/json",
-        },
-      }),
-    });
+            generationConfig: {
+              responseMimeType: "application/json",
+            },
+          }),
+        });
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("Gemini API Error Response:", errText);
+        if (response.ok) {
+          success = true;
+          break;
+        } else {
+          lastErrorMsg = await response.text();
+          console.warn(`Gemini Model ${model} failed:`, lastErrorMsg);
+        }
+      } catch (err: any) {
+        lastErrorMsg = err.message || String(err);
+        console.warn(`Gemini Model ${model} exception:`, err);
+      }
+    }
+
+    if (!success || !response) {
       return NextResponse.json(
-        { error: `Gemini API 호출에 실패했습니다: ${response.statusText}` },
-        { status: response.status }
+        { error: `Gemini API 호출에 실패했습니다: ${lastErrorMsg}` },
+        { status: response ? response.status : 500 }
       );
     }
 

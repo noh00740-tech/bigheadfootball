@@ -875,11 +875,11 @@ export default function Home() {
 
                   <div>
                     <h4 className="text-base font-black text-white mb-2 flex items-center gap-1.5">
-                      <span className="w-1.5 h-4 bg-[#00f5d4] rounded-full"></span> 구글 제미나이 3.5 플래시 전술 분석
+                      <span className="w-1.5 h-4 bg-[#00f5d4] rounded-full"></span> 구글 제미나이 3.5 / 3.1 전술 분석
                     </h4>
                     <p className="text-slate-400 pl-3">
                       4명의 선수 배치가 완료되면 분석기가 활성화됩니다.
-                      구글 최신 <span className="text-[#00f5d4] font-bold">Gemini 3.5 Flash</span> 인공지능이 선수들의 개별 스탯(속도, 슈팅, 점프)과 국가 조합 시너지를 정밀하게 계산해 전문가처럼 평가를 내려줍니다.
+                      구글 최신 <span className="text-[#00f5d4] font-bold">Gemini 3.5 Flash / 3.1 Flash-Lite</span> 인공지능이 선수들의 개별 스탯(속도, 슈팅, 점프)과 국가 조합 시너지를 정밀하게 계산해 전문가처럼 평가를 내려줍니다.
                     </p>
                   </div>
 
