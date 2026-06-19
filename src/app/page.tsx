@@ -620,25 +620,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* 하단 네비게이션 바 (모바일 전용, 데스크톱에서는 숨김) */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#0a0f1d]/85 backdrop-blur-xl border-t border-white/10 px-6 py-3 flex justify-around items-center">
-        <button onClick={() => router.push("/")} className="flex flex-col items-center gap-1 text-[#00f5d4] hover:opacity-80 transition-opacity">
-          <HomeIcon className="w-5 h-5" />
-          <span className="text-[10px] font-black tracking-widest uppercase">Home</span>
-        </button>
-        <button onClick={() => alert("🏆 챌린지 모드는 다음 단계에서 업데이트됩니다!")} className="flex flex-col items-center gap-1 text-slate-400 hover:text-[#00f5d4] transition-colors">
-          <Flag className="w-5 h-5" />
-          <span className="text-[10px] font-black tracking-widest uppercase">Challenges</span>
-        </button>
-        <button onClick={() => alert("📊 리더보드는 다음 단계에서 업데이트됩니다!")} className="flex flex-col items-center gap-1 text-slate-400 hover:text-[#00f5d4] transition-colors">
-          <BarChart3 className="w-5 h-5" />
-          <span className="text-[10px] font-black tracking-widest uppercase">Leaderboard</span>
-        </button>
-        <button onClick={() => alert("🛒 상점은 다음 단계에서 업데이트됩니다!")} className="flex flex-col items-center gap-1 text-slate-400 hover:text-[#00f5d4] transition-colors">
-          <ShoppingCart className="w-5 h-5" />
-          <span className="text-[10px] font-black tracking-widest uppercase">Store</span>
-        </button>
-      </div>
+
 
       {/* 프로필 설정 모달 */}
       {isProfileModalOpen && (
