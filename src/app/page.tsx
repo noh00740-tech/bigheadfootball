@@ -292,28 +292,26 @@ export default function Home() {
 
       {/* 최상단 WORLD CUP 2026 앱 바 (가로 전체 확장) */}
       <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-white/10 h-16 w-full flex-shrink-0">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 h-full relative">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 h-full flex items-center justify-between">
           {/* 좌측 설명서 버튼 */}
-          <div className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 flex items-center">
-            <button 
-              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-850 hover:to-slate-750 border-2 border-indigo-500/50 hover:border-indigo-400 rounded-xl transition-all duration-300 text-slate-100 hover:scale-[1.03] shadow-[0_0_15px_rgba(99,102,241,0.2)] cursor-pointer"
-              onMouseEnter={playHoverSound}
-              onClick={() => {
-                playClickSound();
-                setManualActiveTab("game");
-                setIsManualModalOpen(true);
-              }}
-            >
-              <BookOpen className="w-4 h-4 text-indigo-400" />
-              <span className="text-xs md:text-sm font-black whitespace-nowrap tracking-wider">
-                게임 설명서
-              </span>
-            </button>
-          </div>
+          <button 
+            className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-850 hover:to-slate-750 border-2 border-indigo-500/50 hover:border-indigo-400 rounded-xl transition-all duration-300 text-slate-100 hover:scale-[1.03] shadow-[0_0_15px_rgba(99,102,241,0.2)] cursor-pointer"
+            onMouseEnter={playHoverSound}
+            onClick={() => {
+              playClickSound();
+              setManualActiveTab("game");
+              setIsManualModalOpen(true);
+            }}
+          >
+            <BookOpen className="w-4 h-4 text-indigo-400" />
+            <span className="text-xs md:text-sm font-black hidden sm:inline whitespace-nowrap tracking-wider">
+              게임 설명서
+            </span>
+          </button>
 
           {/* 중앙 정렬 로고 */}
           <span
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl md:text-2xl font-black tracking-widest text-[#f5d0e8] uppercase cursor-pointer whitespace-nowrap"
+            className="text-base sm:text-xl md:text-2xl font-black tracking-widest text-[#f5d0e8] uppercase cursor-pointer whitespace-nowrap"
             onMouseEnter={playHoverSound}
             onClick={() => {
               playClickSound();
@@ -325,9 +323,9 @@ export default function Home() {
           </span>
 
           {/* 우측 프로필 아이콘 및 등록 상태 (절대 좌표 우측 고정 배치로 화면 우측에 정렬) */}
-          <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 flex flex-col items-center">
+          <div className="relative flex flex-col items-center">
             <button 
-              className="flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-850 hover:to-slate-750 border-2 border-[#00f5d4]/50 hover:border-[#00f5d4] rounded-xl transition-all duration-300 text-slate-100 hover:scale-[1.03] shadow-[0_0_20px_rgba(0,245,212,0.2)] cursor-pointer"
+              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-850 hover:to-slate-750 border-2 border-[#00f5d4]/50 hover:border-[#00f5d4] rounded-xl transition-all duration-300 text-slate-100 hover:scale-[1.03] shadow-[0_0_20px_rgba(0,245,212,0.2)] cursor-pointer"
               onMouseEnter={playHoverSound}
               onClick={() => {
                 playClickSound();
@@ -335,17 +333,16 @@ export default function Home() {
                 setIsProfileModalOpen(true);
               }}
             >
-
-              <User className="w-5 h-5 text-[#00f5d4] animate-pulse" />
-              <span className="text-sm md:text-base font-black whitespace-nowrap tracking-wider">
+              <User className="w-4 h-4 text-[#00f5d4] animate-pulse" />
+              <span className="text-xs md:text-sm font-black whitespace-nowrap tracking-wider">
                 {playerName ? `${playerName}님` : "프로필 설정"}
               </span>
             </button>
             
-            {/* 프로필 아래 깜빡이는 유도 화살표 (크기 확대) */}
-            <div className="absolute top-[56px] flex flex-col items-center animate-bounce pointer-events-none">
-              <ChevronsUp className="w-8 h-8 text-[#00f5d4] drop-shadow-[0_0_12px_#00f5d4]" />
-              <span className="text-[9px] font-black tracking-widest text-[#00f5d4] uppercase bg-slate-950/80 px-1.5 py-0.5 rounded border border-[#00f5d4]/20 mt-0.5 backdrop-blur-sm shadow-[0_0_10px_rgba(0,245,212,0.1)]">
+            {/* 프로필 아래 깜빡이는 유도 화살표 (크기 축소 및 md 이상에서만 표시) */}
+            <div className="absolute top-[48px] hidden md:flex flex-col items-center animate-bounce pointer-events-none">
+              <ChevronsUp className="w-6 h-6 text-[#00f5d4] drop-shadow-[0_0_8px_#00f5d4]" />
+              <span className="text-[8px] font-black tracking-widest text-[#00f5d4] uppercase bg-slate-950/80 px-1.5 py-0.5 rounded border border-[#00f5d4]/20 mt-0.5 backdrop-blur-sm shadow-[0_0_10px_rgba(0,245,212,0.1)]">
                 PROFILE
               </span>
             </div>

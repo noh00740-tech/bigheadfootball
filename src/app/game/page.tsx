@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { User, Footprints, Zap, ChevronsUp, Swords, ArrowLeft, Play, Pause, Flame, Trophy } from "lucide-react";
+import { User, Footprints, Zap, ChevronsUp, Swords, ArrowLeft, Play, Pause, Flame, Trophy, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 interface Player {
@@ -78,6 +78,14 @@ export default function GamePage() {
   // Canvas 및 키 입력 레퍼런스
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const keys = useRef<{ [key: string]: boolean }>({});
+
+  const handleTouchStart = (key: string) => {
+    keys.current[key] = true;
+  };
+
+  const handleTouchEnd = (key: string) => {
+    keys.current[key] = false;
+  };
 
   const [isPaused, setIsPaused] = useState(false);
   const isPausedRef = useRef(false);
@@ -1235,6 +1243,50 @@ export default function GamePage() {
                     height={450}
                     className="w-full aspect-[20/9] block bg-slate-950"
                   />
+                </div>
+
+                {/* 모바일 가상 조작 패드 */}
+                <div className="flex md:hidden justify-between w-full max-w-lg px-6 py-4 mt-2 select-none z-20">
+                  {/* 이동 방향 패드 (좌/우) */}
+                  <div className="flex gap-4">
+                    <button
+                      onTouchStart={() => handleTouchStart("ArrowLeft")}
+                      onTouchEnd={() => handleTouchEnd("ArrowLeft")}
+                      onTouchCancel={() => handleTouchEnd("ArrowLeft")}
+                      onMouseDown={() => handleTouchStart("ArrowLeft")}
+                      onMouseUp={() => handleTouchEnd("ArrowLeft")}
+                      onMouseLeave={() => handleTouchEnd("ArrowLeft")}
+                      className="w-16 h-16 bg-slate-900/60 border border-slate-700/50 rounded-2xl flex items-center justify-center active:bg-cyan-500/20 active:border-cyan-400 active:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all shadow-lg touch-none cursor-pointer"
+                    >
+                      <ChevronLeft className="w-8 h-8 text-cyan-400" />
+                    </button>
+                    <button
+                      onTouchStart={() => handleTouchStart("ArrowRight")}
+                      onTouchEnd={() => handleTouchEnd("ArrowRight")}
+                      onTouchCancel={() => handleTouchEnd("ArrowRight")}
+                      onMouseDown={() => handleTouchStart("ArrowRight")}
+                      onMouseUp={() => handleTouchEnd("ArrowRight")}
+                      onMouseLeave={() => handleTouchEnd("ArrowRight")}
+                      className="w-16 h-16 bg-slate-900/60 border border-slate-700/50 rounded-2xl flex items-center justify-center active:bg-cyan-500/20 active:border-cyan-400 active:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all shadow-lg touch-none cursor-pointer"
+                    >
+                      <ChevronRight className="w-8 h-8 text-cyan-400" />
+                    </button>
+                  </div>
+
+                  {/* 점프 패드 */}
+                  <div>
+                    <button
+                      onTouchStart={() => handleTouchStart("ArrowUp")}
+                      onTouchEnd={() => handleTouchEnd("ArrowUp")}
+                      onTouchCancel={() => handleTouchEnd("ArrowUp")}
+                      onMouseDown={() => handleTouchStart("ArrowUp")}
+                      onMouseUp={() => handleTouchEnd("ArrowUp")}
+                      onMouseLeave={() => handleTouchEnd("ArrowUp")}
+                      className="w-16 h-16 bg-slate-900/60 border border-slate-700/50 rounded-2xl flex items-center justify-center active:bg-emerald-500/20 active:border-emerald-400 active:shadow-[0_0_15px_rgba(52,211,153,0.4)] transition-all shadow-lg touch-none cursor-pointer"
+                    >
+                      <ChevronUp className="w-8 h-8 text-emerald-400" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* 조작 설명 및 뒤로가기 제어 (여백 최소화) */}
